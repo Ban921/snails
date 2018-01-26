@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>turbo</title>
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <style>
+  	#turbo td{
+		min-width: 	50px;
+		height: 50px;
+		text-align: center;	
+  	}
+  </style>
+</head>
+<body>
+	<form>
+		寬：<input type="text" id="width" value="5"><br>
+		長：<input type="text" id="leng" value="6"><br>
+		方向：<select id="direct"><option value="1">順時針</option><option value="0">逆時針</option></select><br>
+		<input type="button" value="開始" id="start">
+	</form>
+	<table id="turbo" border="1"></table>
+	<script type="text/javascript">
+		$('#start').click(function(){
+			//初始化
+			$('#turbo').html('');
+		var i=1;
+		var table_str = '';
+		var tbody_str = '';
+		var c=$('#width').val()*$('#leng').val();
+		var d={'x':[1,1],'y':[1,-1]};
+		var m = {'x':$('#width').val(),'y':$('#leng').val()};//邊距
+		var _d = ['x','y'];
+			if($('#direct').val()==0){
+				d.x[1]*=-1;
+				d.y[1]*=-1;
+				_d.reverse();
+			}
+			for (var a = 1; a <= m['x']; a++) {
+			tbody_str += '<td align="center"></td>';
+		}
+		for (var a = 1; a <= m['y']; a++) {
+			table_str += '<tr>' + tbody_str + '</tr>';
+		}
+
+		$('#turbo').html(table_str).show();
+
+			//蝸牛
+		var draw = setInterval(function(){
+				$('#turbo tr:nth-child('+d['y'][0]+') td:nth-child('+d['x'][0]+')').html(i).attr('id','a'+i);
+				window.location.hash = '#a'+i;
+				d[_d[0]][0]+=d[_d[0]][1];
+				if(d[_d[0]][0] > m[_d[0]] || d[_d[0]][0] < 1||$('#turbo tr:nth-child('+d['y'][0]+') td:nth-child('+d['x'][0]+')').html()!=""){
+					d[_d[0]][0]-=d[_d[0]][1];
+					_d.reverse();
+					d[_d[0]][1]*=(-1);
+					d[_d[0]][0]+=d[_d[0]][1];
+				}
+				i++;
+				if(i>c) clearInterval(draw);
+			},100)
+		})
+	</script>
+</body>
+</html>
